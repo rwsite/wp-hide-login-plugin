@@ -6,7 +6,7 @@
  * Requires at least: 6.4
  * Tested up to: 6.8
  * Requires PHP: 8.0
- * Domain Path: languages
+ * Domain Path: /languages/
  * Text Domain: whl
  *
  * License: GPLv2 or later
@@ -88,7 +88,7 @@ class Plugin
     {
         add_settings_section(
             'whl-section',
-            'Hide Login',
+            __('Hide Login', 'whl'),
             [$this, 'whl_section_desc'],
             'general'
         );
@@ -115,7 +115,7 @@ class Plugin
 
     public function whl_section_desc(): void
     {
-        echo '<p>' . __('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl') . '</p>';
+        echo '<p id="whl_settings">' . __('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl') . '</p>';
     }
 
     public function whl_page_input(): void
