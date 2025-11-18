@@ -1,0 +1,8 @@
+
+# file: ~/.gitignore_global
+.DS_Store
+.idea/
+*.phar
+.phpunit.cache
+vendor
+lib/
