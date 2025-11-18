@@ -16,7 +16,7 @@
 namespace hide_login;
 
 // don't load directly
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit('-1');
 }
 
@@ -24,6 +24,7 @@ if (!defined('ABSPATH')) {
 class Plugin
 {
     private static ?Plugin $instance = null;
+
     private bool $wp_login_php = false;
 
     private function __construct()
@@ -33,7 +34,7 @@ class Plugin
 
     protected function init(): void
     {
-        load_plugin_textdomain('whl', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('whl', false, dirname(plugin_basename(__FILE__)).'/languages');
 
         global $wp_version;
 
@@ -53,7 +54,7 @@ class Plugin
         add_action('admin_notices', [$this, 'admin_notices']);
         add_action('wp_loaded', [$this, 'wp_loaded']);
 
-        add_filter('plugin_action_links_' . self::get_basename(), [$this, 'plugin_action_links']);
+        add_filter('plugin_action_links_'.self::get_basename(), [$this, 'plugin_action_links']);
         add_filter('site_url', [$this, 'site_url'], 10, 4);
         add_filter('network_site_url', [$this, 'network_site_url'], 10, 3);
         add_filter('wp_redirect', [$this, 'wp_redirect'], 10, 2);
@@ -81,7 +82,7 @@ class Plugin
 
     public function admin_notices_incompatible(): void
     {
-        echo '<div class="error notice is-dismissible"><p>' . __('Please upgrade to the latest version of WordPress to activate', 'whl') . ' <strong>' . __('Hide Login', 'whl') . '</strong>.</p></div>';
+        echo '<div class="error notice is-dismissible"><p>'.__('Please upgrade to the latest version of WordPress to activate', 'whl').' <strong>'.__('Hide Login', 'whl').'</strong>.</p></div>';
     }
 
     public function admin_init(): void
@@ -95,7 +96,7 @@ class Plugin
 
         add_settings_field(
             'whl_page',
-            '<label for="whl_page">' . __('Login url', 'whl') . '</label>',
+            '<label for="whl_page">'.__('Login url', 'whl').'</label>',
             [$this, 'whl_page_input'],
             'general',
             'whl-section'
@@ -103,7 +104,7 @@ class Plugin
 
         add_settings_field(
             'whl_redirect_admin',
-            '<label for="whl_redirect_admin">' . __('Redirection url', 'whl') . '</label>',
+            '<label for="whl_redirect_admin">'.__('Redirection url', 'whl').'</label>',
             [$this, 'whl_redirect_admin_input'],
             'general',
             'whl-section'
@@ -115,25 +116,18 @@ class Plugin
 
     public function whl_section_desc(): void
     {
-        echo '<p id="whl_settings">' . __('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl') . '</p>';
+        echo '<p id="whl_settings">'.__('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl').'</p>';
     }
 
     public function whl_page_input(): void
     {
-
         if (get_option('permalink_structure')) {
-
-            echo '<code>' . trailingslashit(home_url()) . '</code> <input id="whl_page" type="text" name="whl_page" value="' . $this->new_login_slug() . '">' . ($this->use_trailing_slashes() ? ' <code>/</code>' : '');
-
+            echo '<code>'.trailingslashit(home_url()).'</code> <input id="whl_page" type="text" name="whl_page" value="'.$this->new_login_slug().'">'.($this->use_trailing_slashes() ? ' <code>/</code>' : '');
         } else {
-
-            echo '<code>' . trailingslashit(home_url()) . '?</code> <input id="whl_page" type="text" name="whl_page" value="' . $this->new_login_slug() . '">';
-
+            echo '<code>'.trailingslashit(home_url()).'?</code> <input id="whl_page" type="text" name="whl_page" value="'.$this->new_login_slug().'">';
         }
-
-        echo '<p class="description">' . __('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl') . '</p>';
+        echo '<p class="description">'.__('Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people.', 'whl').'</p>';
     }
-
 
     private function new_login_slug(): string
     {
@@ -151,11 +145,11 @@ class Plugin
     public function whl_redirect_admin_input(): void
     {
         if (get_option('permalink_structure')) {
-            echo '<code>' . trailingslashit(home_url()) . '</code> <input id="whl_redirect_admin" type="text" name="whl_redirect_admin" value="' . $this->new_redirect_slug() . '">' . ($this->use_trailing_slashes() ? ' <code>/</code>' : '');
+            echo '<code>'.trailingslashit(home_url()).'</code> <input id="whl_redirect_admin" type="text" name="whl_redirect_admin" value="'.$this->new_redirect_slug().'">'.($this->use_trailing_slashes() ? ' <code>/</code>' : '');
         } else {
-            echo '<code>' . trailingslashit(home_url()) . '?</code> <input id="whl_redirect_admin" type="text" name="whl_redirect_admin" value="' . $this->new_redirect_slug() . '">';
+            echo '<code>'.trailingslashit(home_url()).'?</code> <input id="whl_redirect_admin" type="text" name="whl_redirect_admin" value="'.$this->new_redirect_slug().'">';
         }
-        echo '<p class="description">' . __('Redirect URL when someone tries to access the wp-login.php page and the wp-admin directory while not logged in.', 'whl') . '</p>';
+        echo '<p class="description">'.__('Redirect URL when someone tries to access the wp-login.php page and the wp-admin directory while not logged in.', 'whl').'</p>';
     }
 
     private function new_redirect_slug(): string
@@ -163,6 +157,7 @@ class Plugin
         if ($slug = get_option('whl_redirect_admin')) {
             return $slug;
         }
+
         return '404';
     }
 
@@ -170,39 +165,28 @@ class Plugin
     {
         global $pagenow;
 
-        if ($pagenow === 'options-general.php' && isset($_GET['settings-updated']) && !isset($_GET['page'])) {
-            echo '<div class="updated notice is-dismissible"><p>' . sprintf(__('Your login page is now here: <strong><a href="%1$s">%2$s</a></strong>. Bookmark this page!', 'whl'), $this->new_login_url(), $this->new_login_url()) . '</p></div>';
+        if ($pagenow === 'options-general.php' && isset($_GET['settings-updated']) && ! isset($_GET['page'])) {
+            echo '<div class="updated notice is-dismissible"><p>'.sprintf(__('Your login page is now here: <strong><a href="%1$s">%2$s</a></strong>. Bookmark this page!', 'whl'), $this->new_login_url(), $this->new_login_url()).'</p></div>';
         }
     }
 
     public function new_login_url(?string $scheme = null): string
     {
-
         $url = apply_filters('hide_login_home_url', home_url('/', $scheme));
-
         if (get_option('permalink_structure')) {
-
-            return $this->user_trailingslashit($url . $this->new_login_slug());
-
-        } else {
-
-            return $url . '?' . $this->new_login_slug();
-
+            return $this->user_trailingslashit($url.$this->new_login_slug());
         }
-
+        return $url.'?'.$this->new_login_slug();
     }
 
     private function user_trailingslashit(string $string): string
     {
-
         return $this->use_trailing_slashes() ? trailingslashit($string) : untrailingslashit($string);
-
     }
 
     public function plugin_action_links(array $links): array
     {
-        array_unshift($links, '<a href="' . admin_url('options-general.php#whl_settings') . '">' . __('Settings', 'whl') . '</a>');
-
+        array_unshift($links, '<a href="'.admin_url('options-general.php#whl_settings').'">'.__('Settings', 'whl').'</a>');
         return $links;
     }
 
@@ -217,9 +201,9 @@ class Plugin
         $request = parse_url(rawurldecode($_SERVER['REQUEST_URI']));
         if ((strpos(rawurldecode($_SERVER['REQUEST_URI']), 'wp-login.php') !== false
                 || (isset($request['path']) && untrailingslashit($request['path']) === site_url('wp-login', 'relative')))
-            && !is_admin()) {
+            && ! is_admin()) {
             $this->wp_login_php = true;
-            $_SERVER['REQUEST_URI'] = $this->user_trailingslashit('/' . str_repeat('-/', 10));
+            $_SERVER['REQUEST_URI'] = $this->user_trailingslashit('/'.str_repeat('-/', 10));
             global $pagenow;
             $pagenow = 'index.php';
         }
@@ -229,7 +213,7 @@ class Plugin
     {
         $request = parse_url(rawurldecode($_SERVER['REQUEST_URI']));
         if ((isset($request['path']) && untrailingslashit($request['path']) === home_url($this->new_login_slug(), 'relative'))
-            || (!get_option('permalink_structure')
+            || (! get_option('permalink_structure')
                 && isset($_GET[$this->new_login_slug()])
                 && empty($_GET[$this->new_login_slug()]))) {
             $_SERVER['SCRIPT_NAME'] = $this->new_login_slug();
@@ -244,18 +228,18 @@ class Plugin
 
         $request = parse_url(rawurldecode($_SERVER['REQUEST_URI']));
 
-        if (is_admin() && !is_user_logged_in() && !defined('WP_CLI') && !defined('DOING_AJAX') && !defined('DOING_CRON') && $pagenow !== 'admin-post.php' && $request['path'] !== '/wp-admin/options.php') {
+        if (is_admin() && ! is_user_logged_in() && ! defined('WP_CLI') && ! defined('DOING_AJAX') && ! defined('DOING_CRON') && $pagenow !== 'admin-post.php' && $request['path'] !== '/wp-admin/options.php') {
             wp_safe_redirect($this->new_redirect_url());
             exit();
         }
 
-        if (!is_user_logged_in() && isset($request['path']) && $request['path'] === '/wp-admin/options.php') {
-            header('Location: ' . $this->new_redirect_url());
+        if (! is_user_logged_in() && isset($request['path']) && $request['path'] === '/wp-admin/options.php') {
+            header('Location: '.$this->new_redirect_url());
             exit;
         }
 
         if ($pagenow === 'wp-login.php' && isset($request['path']) && $request['path'] !== $this->user_trailingslashit($request['path']) && get_option('permalink_structure')) {
-            wp_safe_redirect($this->user_trailingslashit($this->new_login_url()) . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : ''));
+            wp_safe_redirect($this->user_trailingslashit($this->new_login_url()).(! empty($_SERVER['QUERY_STRING']) ? '?'.$_SERVER['QUERY_STRING'] : ''));
             exit;
         } elseif ($this->wp_login_php) {
             $this->wp_template_loader();
@@ -274,35 +258,28 @@ class Plugin
                 exit();
             }
 
-            @require_once ABSPATH . 'wp-login.php';
+            @require_once ABSPATH.'wp-login.php';
             exit;
         }
     }
 
     public function new_redirect_url(?string $scheme = null): string
     {
-
         if (get_option('permalink_structure')) {
-
-            return $this->user_trailingslashit(home_url('/', $scheme) . $this->new_redirect_slug());
-
-        } else {
-
-            return home_url('/', $scheme) . '?' . $this->new_redirect_slug();
-
+            return $this->user_trailingslashit(home_url('/', $scheme).$this->new_redirect_slug());
         }
-
+        return home_url('/', $scheme).'?'.$this->new_redirect_slug();
     }
 
     private function wp_template_loader(): void
     {
         global $pagenow;
         $pagenow = 'index.php';
-        if (!defined('WP_USE_THEMES')) {
+        if (! defined('WP_USE_THEMES')) {
             define('WP_USE_THEMES', true);
         }
         wp();
-        require_once ABSPATH . WPINC . '/template-loader.php';
+        require_once ABSPATH.WPINC.'/template-loader.php';
         exit;
     }
 
@@ -336,6 +313,7 @@ class Plugin
                 $url = $this->new_login_url($scheme);
             }
         }
+
         return $url;
     }
 
@@ -351,6 +329,7 @@ class Plugin
         if (str_contains($location, 'https://wordpress.com/wp-login.php')) {
             return $location;
         }
+
         return $this->filter_wp_login_php($location);
     }
 
