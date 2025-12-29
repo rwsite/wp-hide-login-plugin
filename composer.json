@@ -1,0 +1,16 @@
+{
+  "name": "rwsite/wp-hide-login-plugin",
+  "description": "wp-hide-login-plugin",
+  "type": "wordpress-plugin",
+  "version": "1.0.0",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Aleksei Tikhomirov",
+      "email": "alex@rwsite.ru"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  }
+}
